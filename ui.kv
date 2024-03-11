@@ -1,0 +1,501 @@
+#:kivy 2.1.0
+#:import platform kivy.utils.platform
+#:import utils kivy.utils
+#:import Clock kivy.clock.Clock
+
+WindowManager:
+
+    canvas.before:
+        Color:
+            rgb: utils.get_color_from_hex('#E9CCA4')
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+####### MENUS #######
+
+    MainMenu:
+    Menu:
+    Upload:
+    TextIn:
+
+####### FONT SCREENS #######
+
+    FontTI:
+    FontOCR:
+
+####### OUTPUT SCREENS #######
+    Output:
+    OutputOCR:
+    OutputTI:
+    OpenAR:
+
+####### GREETING #######
+
+<MainMenu>:
+    name: "main" 
+    
+    FloatLayout:
+
+        Label:
+            text: "Metamor-Font-sys"
+            font_name:"OpenDyslexic-Regular.ttf"
+            font_size: "50dp"
+            color: 0,0,0,1
+            pos_hint: {'center_x':0.504, 'center_y': 0.646}
+
+        Label:
+            text: "Metamor-Font-sys"
+            font_name:"OpenDyslexic-Regular.ttf"
+            font_size: "50dp"
+            pos_hint: {'center_x':0.5, 'center_y': 0.65}
+        
+        
+
+    FloatLayout:
+
+        Button:
+
+            background_normal: "assets//start.png"
+            background_down: "assets//startdown.png"
+            border: 0, 0, 0, 0
+            size: 128, 128
+            size_hint: None, None
+            pos_hint: {'center_x':0.5, 'center_y': 0.25}
+
+            on_release: app.root.current = "menu" # GO TO MAIN MENU
+
+####### MAIN MENU ####### 
+
+<Menu>:
+
+    name: "menu"
+
+    FloatLayout:
+
+        Label:
+            text: "Choose Your Input"
+            font_name:"OpenDyslexic-Regular.ttf"
+            font_size:"45"
+            color: 0,0,0,1
+            pos_hint: {'center_x':0.504, 'center_y': 0.748}
+            
+        Label:
+            text: "Choose Your Input"
+            font_name:"OpenDyslexic-Regular.ttf"
+            font_size:"45"
+            pos_hint: {'center_x':0.5, 'center_y': 0.75}
+
+        Button:
+
+            background_normal: "assets//scan.png"
+            background_down: "assets//scan2.png"
+            border: 0, 0, 0, 0
+            size: 128, 128
+            size_hint: None, None
+            pos_hint: {'center_x':0.35, 'center_y': 0.5}
+            on_release: app.root.current = "upload" # GO TO UPLOAD
+
+        Button:
+
+            background_normal: "assets//text.png"
+            background_down: "assets//text2.png"
+            border: 0, 0, 0, 0
+            size: 128, 128
+            size_hint: None, None
+            pos_hint: {'center_x':0.65, 'center_y': 0.5}
+            on_release: app.root.current = "textinput" # GO TO TEXT INPUT ###################################### textinput
+
+####### UPLOAD FILE FOR OCR #######
+
+<Upload>:
+    #on_enter: Clock.schedule_once(self.changeScreen,20)
+    id: upload
+    name: "upload"
+    
+    FloatLayout:
+    
+        Image:
+
+            id: my_upload
+            source:'placeholder.jpg'
+            size_hint_y: .8
+            size_hint_x: .8
+            pos_hint: {'center_x':0.5, 'center_y': 0.8}
+
+        FileChooser:
+
+            id: filechooser
+            pos_hint: {'center_x':0.5, 'center_y': 0.45}
+            size_hint_y: 0.2
+            size_hint_x: 0.5
+            filters: [app.file_filter]
+            filter_dirs: True
+            rootpath: "."
+            #rootpath: '/storage/emulated/0/DCIM/Camera' if platform == 'android' else '/'
+            on_selection: upload.selected(filechooser.selection)
+            
+        Button:
+        
+            background_normal: "assets//submit.png"
+            background_down: "assets//submit2.png"
+            border: 0, 0, 0, 0
+            size: 128, 128
+            size_hint: None, None
+            pos_hint: {'center_x':0.85, 'center_y': 0.15}
+            on_press: app.root.current = "fontocr"
+            #on_press: root.uploadfile() #UPLOAD FILE
+            #on_release: root.view_google() #OPEN WEBVIEW  #NOTE: SCREEN CHANGE HAPPENS IN MAIN.PY
+
+        Button:
+
+            background_normal: "assets//back2.png"
+            background_down: "assets//back2down.png"
+            border: 0, 0, 0, 0
+            size: 128, 128
+            size_hint: None, None
+            pos_hint: {'center_x':0.65, 'center_y': 0.15}
+            #root.manager.transition.direction = 'left'
+            on_release: app.root.current = "menu" # GO BACK TO MENU
+
+####### TEXT INPUT OPTION ####### 
+
+<TextIn>:
+
+    name: "textinput"
+    objectt: input_text
+    FloatLayout:
+
+        Label:
+            text: "Input Text"
+            font_name:"OpenDyslexic-Regular.ttf"
+            font_size:"45"
+            color: 0, 0, 0, 1
+            pos_hint: {'center_x':0.504, 'center_y': 0.898}
+
+        Label:
+            text: "Input Text"
+            font_name:"OpenDyslexic-Regular.ttf"
+            font_size:"45"
+            pos_hint: {'center_x':0.5, 'center_y': 0.9}
+
+        TextInput:
+            id: input_text
+            pos_hint: {'center_x':0.5, 'center_y': 0.6}
+            size_hint: .9, .5
+            font_size: "35dp"
+            multiline: True
+
+        FloatLayout:
+
+            Button:
+                background_normal: "assets//back2.png"
+                background_down: "assets//back2down.png"
+                border: 0, 0, 0, 0
+                size: 128, 128
+                size_hint: None, None
+                pos_hint: {'center_x':0.25, 'center_y': 0.15}
+                on_release: app.root.current = "menu" #GO BACK TO MENU
+
+            Button:
+                background_normal: "assets//submit.png"
+                background_down: "assets//submit2.png"
+                border: 0, 0, 0, 0
+                size: 128, 128
+                size_hint: None, None
+                pos_hint: {'center_x':0.75, 'center_y': 0.15}
+                #on_press: root.submit_text()
+                on_release: app.root.current = "fontti" #GO TO FONT MENU FOR TEXT INPUT
+
+####### FONT MENU FOR TEXT INPUT #######
+
+<FontTI>:
+
+    name: "fontti"
+    FloatLayout:
+
+        Label:
+            id: click_label
+            text: "Choose Font Below"
+            font_size: "40dp"
+            font_name:"OpenDyslexic-Regular.ttf"
+            color: 0, 0, 0, 1
+            pos_hint: {'center_x':0.504, 'center_y': 0.898}
+    
+        Label:
+            id: click_label
+            text: "Choose Font Below"
+            font_size: "40dp"
+            font_name:"OpenDyslexic-Regular.ttf"
+            pos_hint: {'center_x':0.5, 'center_y': 0.9}
+    
+####### OPENDYSLEXIC #######
+       
+        Button:
+            text: "OpenDyslexic"
+            pos_hint: {'center_x':0.5, 'center_y': 0.75}
+            size_hint: .40, None
+            font_name:"OpenDyslexic-Regular.ttf"
+            font_size: "40dp"
+            #on_press: root.OpenDyslexic()
+            on_release: app.root.current = "output" # GO TO IMAGE OUTPUT FROM TEXT INPUT
+
+####### SYLEXIAD #######  
+   
+        Button:
+            text: "Sylexiad"
+            pos_hint: {'center_x':0.5, 'center_y': 0.55}
+            size_hint: .40, None
+            font_name:"SylexiadSansSpacedMed.ttf"
+            font_size: "40dp"
+            #on_press: root.Sylexiad()
+            on_release: app.root.current = "output" # GO TO IMAGE OUTPUT FROM TEXT INPUT
+
+ ####### CADMAN #######     
+      
+        Button:
+            text: "Cadman"
+            pos_hint: {'center_x':0.5, 'center_y': 0.35}
+            size_hint: .40, None
+            font_name:"Cadman_Roman.otf"
+            font_size: "40dp"
+            #on_press: root.Cadman()
+            on_release: app.root.current = "output" # GO TO IMAGE OUTPUT FROM TEXT INPUT
+
+ ####### HELVETICA #######        
+      
+        Button:
+            text: "Helvetica"
+            pos_hint: {'center_x':0.5, 'center_y': 0.15}
+            size_hint: .40, None
+            font_name:"Helvetica.ttf"
+            font_size: "40dp"
+            #on_press: root.Helvetica()
+            on_release: app.root.current = "outputti" # GO TO IMAGE OUTPUT FROM TEXT INPUT
+
+#-----------------------------------------------
+            
+        Button:
+
+            background_normal: "assets//back2.png"
+            background_down: "assets//back2down.png"
+            border: 0, 0, 0, 0
+            size: 128, 128
+            size_hint: None, None
+            pos_hint: {'center_x':0.85, 'center_y': 0.15}
+            on_release: app.root.current = "textinput" # GO BACK TO PREVIOUS SCREEN (TEXT INPUT)
+
+####### FONT MENU FOR OCR #######
+
+<FontOCR>:
+    
+    id: fontocr
+    name: "fontocr"
+    FloatLayout:
+
+        Label:
+            id: click_label
+            text: "Choose Font Below"
+            font_size: "40dp"
+            font_name:"OpenDyslexic-Regular.ttf"
+            color: 0, 0, 0, 1
+            pos_hint: {'center_x':0.504, 'center_y': 0.898}
+    
+        Label:
+            id: click_label
+            text: "Choose Font Below"
+            font_size: "40dp"
+            font_name:"OpenDyslexic-Regular.ttf"
+            pos_hint: {'center_x':0.5, 'center_y': 0.9}
+    
+#--------------OpenDyslexic-------------------- # GO TO IMAGE OUTPUT FROM OCR
+       
+        Button:
+            text: "OpenDyslexic"
+            pos_hint: {'center_x':0.5, 'center_y': 0.75}
+            size_hint: .40, None
+            font_name:"OpenDyslexic-Regular.ttf"
+            font_size: "40dp"
+            #on_press: root.OpenDyslexic()
+            on_release: app.root.current = "outputocr" # GO TO IMAGE OUTPUT FROM OCR
+
+#---------------Sylexiad-----------------------        
+   
+        Button:
+            text: "Sylexiad"
+            pos_hint: {'center_x':0.5, 'center_y': 0.55}
+            size_hint: .40, None
+            font_name:"SylexiadSansSpacedMed.ttf"
+            font_size: "40dp"
+            #on_press: root.Sylexiad() 
+            on_release: app.root.current = "outputocr" # GO TO IMAGE OUTPUT FROM OCR
+
+ #-----------------Cadman----------------------       
+      
+        Button:
+            text: "Cadman"
+            pos_hint: {'center_x':0.5, 'center_y': 0.35}
+            size_hint: .40, None
+            font_name:"Cadman_Roman.otf"
+            font_size: "40dp"
+            #on_press: root.Cadman()
+            on_release: app.root.current = "outputocr" # GO TO IMAGE OUTPUT FROM OCR
+
+ #--------------Helvetica----------------------           
+      
+        Button:
+            text: "Helvetica"
+            pos_hint: {'center_x':0.5, 'center_y': 0.15}
+            size_hint: .40, None
+            font_name:"Helvetica.ttf"
+            font_size: "40dp"
+            #on_press: root.Helvetica()
+            on_release: app.root.current = "outputocr" # GO TO IMAGE OUTPUT FROM OCR
+
+        Button:
+            background_normal: "assets//back2.png"
+            background_down: "assets//back2down.png"
+            border: 0, 0, 0, 0
+            size: 128, 128
+            size_hint: None, None
+            pos_hint: {'center_x':0.85, 'center_y': 0.15}
+            on_release: app.root.current = "upload" # GO BACK TO PREVIOUS SCREEN (UPLOAD)
+
+
+####### IMAGE OUTPUT FROM OCR #######
+
+<OutputOCR>:
+
+    name: "outputocr"
+    FloatLayout:
+
+        Image:
+            #source: root.image_source
+            id: my_upload
+            source:'placeholder.jpg'
+            size_hint_y: .9
+            size_hint_x: .9
+            pos_hint: {'center_x':0.5, 'center_y': 0.75}
+
+        FloatLayout:
+        
+            Button:
+
+                background_normal: "assets//audio.png"
+                background_down: "assets//audiodown.png"
+                border: 0, 0, 0, 0
+                size: 128, 128
+                size_hint: None, None
+                pos_hint: {'center_x':0.70, 'center_y': 0.2}
+                #on_press: root.createttsocr() # PLAY TTS
+
+            Button:
+
+                background_normal: "assets//ar.png"
+                background_down: "assets//ar2.png"
+                border: 0, 0, 0, 0
+                size: 148, 148
+                size_hint: None, None
+                pos_hint: {'center_x':0.30, 'center_y': 0.2}
+                on_release: app.root.current = "openar"
+        
+
+####### IMAGE OUTPUT FROM TEXT INPUT #######
+        
+<OutputTI>:
+    name: "outputti"
+    FloatLayout:
+        
+        Image:
+
+            #source: root.image_source #original
+            source:'placeholder.jpg'
+            size_hint_y: .8
+            size_hint_x: .8
+            pos_hint: {'center_x':0.5, 'center_y': 0.7}
+
+        FloatLayout:
+           
+            Button: 
+
+                background_normal: "assets//back2.png"
+                background_down: "assets//back2down.png"
+                border: 0, 0, 0, 0
+                size: 128, 128
+                size_hint: None, None
+                pos_hint: {'center_x':0.75, 'center_y': 0.2}
+                on_release: app.root.current = "output"
+                
+            Button:
+
+                background_normal: "assets//audio.png"
+                background_down: "assets//audiodown.png"
+                border: 0, 0, 0, 0
+                size: 128, 128
+                size_hint: None, None
+                pos_hint: {'center_x':0.25, 'center_y': 0.2}
+                #on_press: root.createttsit() # PLAY TTS
+            
+  
+<Output>:
+    name: "output"
+    FloatLayout:
+
+        Label:
+            
+            text: "Choose Your Output"
+            font_name:"OpenDyslexic-Regular.ttf"
+            font_size:"45"
+            color: 0, 0, 0, 1
+            pos_hint: {'center_x':0.504, 'center_y': 0.898}
+
+        Label:
+            
+            text: "Choose Your Output"
+            font_name:"OpenDyslexic-Regular.ttf"
+            font_size:"45"
+            pos_hint: {'center_x':0.5, 'center_y': 0.9}
+
+        Button:
+
+            background_normal: "assets//text.png"
+            background_down: "assets//text2.png"
+            border: 0, 0, 0, 0
+            size: 128, 128
+            size_hint: None, None
+            pos_hint: {'center_x':0.25, 'center_y': 0.5}
+            on_release: app.root.current = "outputti"
+
+        Button:
+
+            background_normal: "assets//ar.png"
+            background_down: "assets//ar2.png"
+            border: 0, 0, 0, 0
+            size: 148, 148
+            size_hint: None, None
+            pos_hint: {'center_x':0.75, 'center_y': 0.5}
+            on_release: app.root.current = "openar"
+
+        Button:
+
+            background_normal: "assets//back2.png"
+            background_down: "assets//back2down.png"
+            border: 0, 0, 0, 0
+            size: 128, 128
+            size_hint: None, None
+            pos_hint: {'center_x':0.75, 'center_y': 0.15}
+            on_release: app.root.current = "fontti"
+
+####### OPEN AR APP #######
+
+<OpenAR>:
+    name: "openar"
+    FloatLayout:
+        Button:
+            background_normal: "assets//ar.png"
+            background_down: "assets//ar2.png"
+            border: 0, 0, 0, 0
+            size: 512, 512
+            size_hint: None, None
+            pos_hint: {'center_x':0.5, 'center_y': 0.5}
+            #on_press: root.getapp()
